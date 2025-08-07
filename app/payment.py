@@ -1,5 +1,6 @@
 from database import execute_query
 
+# 결제 등록
 def create_payment(visit_id, payment_data):
     query = """
     INSERT INTO payment (visit_id, amount, payment_method_code, payment_datetime)
@@ -13,9 +14,42 @@ def create_payment(visit_id, payment_data):
         payment_data["payment_datetime"]
     )
 
-    execute_query(query, values)
+    try:
+        execute_query(query, values)
+        print(f"결제 기록 등록 성공: {payment_data}")
+        return True
+    
+    except Exception as e:
+        print("결제 기록 등록 실패")
+        return False
+    
+# 전체 결제 기록 조회
+def get_all_payments():
+    query = """
+    SELECT p.*, v.customer_id, c.name as customer_name, pm.method_name
+    FROM payment p
+    JOIN visit v ON p.visit_id = v.visit_id
+    JOIN customer c ON v.customer_id = c.customer_id
+    JOIN payment_method pm ON p.payment_method_code = pm.method_code
+    ORDER BY p.payment_datetime DESC
+    """
 
+    return execute_query(query, fetch_all=True)
 
+# 고객별 결제 기록 조회
+def get_payments_by_customer(customer_id):
+    query = """
+    SELECT p.*, v.visit_date, pm.method_name
+    FROM payment p
+    JOIN visit v ON p.visit_id = v.visit_id
+    JOIN payment_method pm ON p.payment_method_code = pm.method_code
+    WHERE v.customer_id = %s
+    ORDER BY p.payment_datetime DESC
+    """
+
+    return execute_query(query, fetch_all=True)
+
+# 결제 수정
 def update_payment(payment_data):
     query = """
     UPDATE payment
@@ -29,9 +63,34 @@ def update_payment(payment_data):
         payment_data["payment_datetime"]
     )
 
-    execute_query(query, values)
+    try:
+        execute_query(query, values)
+        print("결제 기록 수정 성공: {payment_data}")
 
+        return True
+
+    except Exception as e:
+        print("결제 기록 수정 실패: {e}")
+
+        return False
+
+# 결제 삭제
 def delete_payment(payment_id):
     query = "DELETE FROM payment WHERE payment_id = %s"
 
-    execute_query(query, (payment_id,))
+    try:
+        execute_query(query, (payment_id,))
+        print("결제 기록 삭제 성공")
+
+        return True
+    
+    except Exception as e:
+        print("결제 기록 삭제 실패")
+        
+        return False
+
+# 결제 수단 조회
+def get_payment_methods():
+    query = "SELECT * FROM payment_method"
+
+    return execute_query(query, fetch_all=True)

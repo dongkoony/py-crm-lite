@@ -1,18 +1,13 @@
 import mysql.connector
-
-dbconfig = {
-    "host": "localhost",
-    "port": 3306,
-    "user": "root",
-    "password": "1234",
-    "database": "mydb",
-    "raise_on_warnings": True,
-    "autocommit": True
-}
+from config import Config
 
 def get_connection():
     try:
-        return mysql.connector.connect(**dbconfig)
+        db_config = Config.get_db_config()
+        connection = mysql.connector.connect(db_config)
+        print("데이터베이스 연결 성공")
+        
+        return connection
     
     except mysql.connector.OperationalError as e:
         print(f"[ERROR] DB 연결 실패: {e}")
@@ -23,6 +18,18 @@ def get_connection():
         return None
 
 def execute_query(query, params=None, fetch_one=False, fetch_all=False):
+    """
+    SQL 쿼리 실행 함수
+
+    Args:
+        query (str): 실행할 SQL 쿼리
+        params (tuple): 쿼리 파라미터
+        fetch_one (bool): 단건 반환 여부
+        fetch_all (bool): 여러건 반환 여부
+
+    Returns:
+        dict or list or None: 쿼리 결과
+    """
     conn = get_connection()
 
     if conn is None:
@@ -54,5 +61,16 @@ def execute_query(query, params=None, fetch_one=False, fetch_all=False):
     finally:
         cursor.close()
         conn.close()
+
+def test_connection():
+    """데이터 베이스 연결 테스트"""
+    conn = get_connection()
+    if conn:
+        print("데이터베이스 연결 테스트 성공")
+        conn.close()
+        return True
+    else:
+        print("데이터베이스 연결 테스트 실패")
+        return False
 
 
