@@ -1,10 +1,7 @@
-from wsgiref.handlers import read_environ
-
-from flask import Flask, request, jsonify, render_template, flash, url_for, redirect
+from flask import Flask, request, render_template, flash, url_for, redirect
 from app.customer import create_customer, get_all_customers, search_customers, update_customer, delete_customer, get_customer_by_birth_month, get_customer_by_customer
-from app.visit import create_visit, get_visits, get_visits_by_customer, update_visit, get_visits_by_date_range, \
-    get_visit_by_visit_id, delete_visit
-from app.payment import create_payment, get_all_payments, get_payments_by_customer, update_payment, delete_payment, get_payment_methods
+from app.visit import create_visit, get_visits, get_visits_by_customer, update_visit, get_visits_by_date_range, get_visit_by_visit_id, delete_visit
+from app.payment import create_payment, get_all_payments, get_payments_by_customer, get_payment_methods
 from app.stats import get_customer_statistics, get_overall_statistics, get_monthly_statistics
 
 from datetime import datetime, timedelta
