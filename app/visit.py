@@ -47,6 +47,11 @@ def get_visits_by_customer(customer_id):
 
     return execute_query(query, (customer_id,), fetch_all=True)
 
+def get_visit_by_visit_id(visit_id):
+    query = "SELECT * FROM visit WHERE visit_id = %s"
+
+    return execute_query(query, (visit_id,), fetch_one=True)
+
 # 방문 기록 수정
 def update_visit(visit_id, memo):
     query = """

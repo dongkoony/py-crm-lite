@@ -36,6 +36,14 @@ def get_all_customers():
 
     return execute_query(query, fetch_all=True)
 
+def get_customer_by_customer(customer_id):
+    query = """
+    SELECT * FROM customer
+    WHERE customer_id = %s
+    """
+
+    return execute_query(query, (customer_id,), fetch_one=True)
+
 # 고객 검색
 def search_customers(search_term):
     query = """
