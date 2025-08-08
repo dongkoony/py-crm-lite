@@ -1,4 +1,4 @@
-from database import execute_query
+from .database import execute_query
 
 # 방문 등록
 def create_visit(customer_id, visit_data):

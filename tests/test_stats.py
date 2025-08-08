@@ -13,17 +13,33 @@ from app.payment import create_payment, get_payments_by_customer, delete_payment
 def sample_data():
     """테스트용 데이터 생성"""
     # 고객 생성
-    create_customer("통계고객", "010-7777-8888", "1990-05-15", "F", "")
+    customer_data = {
+        "name": "통계고객",
+        "phone": "010-7777-5678",
+        "birth_date": "1990-01-01",
+        "gender": "F",
+        "memo": "테스트용"
+    }
+
+    create_customer(customer_data)
     customers = search_customers("통계고객")
     customer_id = customers[0]["customer_id"]
     
     # 방문 생성
-    create_visit(customer_id, {"visit_date": datetime.datetime.now(), "memo": "통계 테스트"})
+    visit_data = {
+        "visit_date": datetime.datetime.now(), 
+        "memo": "결제 테스트"
+    }
+    create_visit(customer_id, visit_data)
     visits = get_visits_by_customer(customer_id)
     visit_id = visits[0]["visit_id"]
     
     # 결제 생성
-    payment_data = {"amount": 75000, "payment_method_code": "CASH", "payment_datetime": datetime.datetime.now()}
+    payment_data = {
+        "amount": 50000, 
+        "payment_method_code": "CASH",
+         "payment_datetime": datetime.datetime.now()
+    }
     create_payment(visit_id, payment_data)
     
     yield customer_id, visit_id

@@ -1,4 +1,4 @@
-from database import execute_query
+from .database import execute_query
 from datetime import datetime, timedelta
 
 # 고객별 총 방문 횟수 조회
@@ -61,7 +61,7 @@ def get_overall_statistics():
     LEFT JOIN payment p ON v.visit_id = p.visit_id
     """
 
-    result = execute_query(query, fetch_all=True)
+    result = execute_query(query, fetch_one=True)
     if result:
         result["total_revenue"] = result["total_revenue"] or 0
         result["avg_revenue_per_visit"] = result["avg_revenue_per_visit"] or 0
@@ -81,7 +81,7 @@ def get_monthly_statistics(year, month):
     WHERE YEAR(v.visit_date) = %s AND MONTH(v.visit_date) = %s
     """
 
-    result = execute_query(query, fetch_all=True)
+    result = execute_query(query, (year, month), fetch_one=True)
 
     if result:
         result["total_revenue"] = result["total_revenue"] or 0

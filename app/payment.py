@@ -1,4 +1,4 @@
-from database import execute_query
+from .database import execute_query
 
 # 결제 등록
 def create_payment(visit_id, payment_data):
@@ -47,7 +47,9 @@ def get_payments_by_customer(customer_id):
     ORDER BY p.payment_datetime DESC
     """
 
-    return execute_query(query, fetch_all=True)
+    result = execute_query(query, (customer_id,), fetch_all=True)
+    return result if result else []
+    # return execute_query(query, fetch_all=True)
 
 # 결제 수정
 def update_payment(payment_data):

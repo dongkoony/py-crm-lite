@@ -1,4 +1,4 @@
-from database import execute_query
+from .database import execute_query
 
 """
 고객 관리 모듈

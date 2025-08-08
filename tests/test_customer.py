@@ -4,22 +4,18 @@
 
 import pytest
 from app.customer import create_customer, get_all_customers, search_customers, update_customer, delete_customer
-
-@pytest.fixture(scope="module")
-def sample_customer():
-    """테스트용 고객 생성"""
-    create_customer("테스트고객", "010-1234-5678", "1990-01-01", "M", "테스트용")
-    customers = search_customers("테스트고객")
-    customer_id = customers[0]["customer_id"]
-    
-    yield customer_id
-    
-    # 정리
-    delete_customer(customer_id)
+from tests.conftest import create_test_customer, cleanup_test_data
 
 def test_create_customer():
     """고객 등록 테스트"""
-    result = create_customer("홍길동", "010-1111-2222", "1985-05-15", "M", "VIP 고객")
+    customer_data = {
+        "name": "홍길동",
+        "phone": "010-1111-2222",
+        "birth_date": "1985-05-15",
+        "gender": "M",
+        "memo": "VIP 고객"
+    }
+    result = create_customer(customer_data)
     assert result is True
     
     # 정리
@@ -34,23 +30,21 @@ def test_get_all_customers():
 
 def test_search_customers():
     """고객 검색 테스트"""
-    # 먼저 고객 생성
-    create_customer("김철수", "010-3333-4444", "1992-03-20", "F", "")
+    # 테스트 고객 생성
+    customer_id = create_test_customer("김길동", "010-3333-4444")
+    assert customer_id is not None
     
     # 검색
-    results = search_customers("김철수")
+    results = search_customers("김길동")
     assert len(results) > 0
-    assert results[0]["name"] == "김철수"
-    
-    # 정리
-    customers = search_customers("김철수")
-    if customers:
-        delete_customer(customers[0]["customer_id"])
+    assert results[0]["name"] == "김길동"
 
-def test_update_customer(sample_customer):
+def test_update_customer(test_customer):
     """고객 정보 수정 테스트"""
+    customer_id = test_customer
+    
     update_data = {
-        "customer_id": sample_customer,
+        "customer_id": customer_id,
         "name": "수정된고객",
         "phone": "010-9999-8888",
         "birth_date": "1990-01-01",
@@ -67,10 +61,9 @@ def test_update_customer(sample_customer):
 
 def test_delete_customer():
     """고객 삭제 테스트"""
-    # 먼저 고객 생성
-    create_customer("삭제테스트", "010-7777-8888", "1988-12-25", "F", "")
-    customers = search_customers("삭제테스트")
-    customer_id = customers[0]["customer_id"]
+    # 테스트 고객 생성
+    customer_id = create_test_customer("삭제테스트", "010-7777-9999")
+    assert customer_id is not None
     
     # 삭제
     result = delete_customer(customer_id)

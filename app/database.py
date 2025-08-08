@@ -1,10 +1,10 @@
 import mysql.connector
-from config import Config
+from .config import Config
 
 def get_connection():
     try:
         db_config = Config.get_db_config()
-        connection = mysql.connector.connect(db_config)
+        connection = mysql.connector.connect(**db_config)
         print("데이터베이스 연결 성공")
         
         return connection
