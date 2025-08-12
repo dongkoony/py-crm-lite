@@ -126,7 +126,18 @@
                                             {{ visit.customer_name }}
                                         </a>
                                     </td>
-                                    <td>{{ visit.visit_date }}</td>
+                                    <td>
+                                        {% if visit.visit_date %}
+                                            {{ visit.visit_date.strftime('%Y-%m-%d') }}
+                                            {% if visit.visit_date.hour < 12 %}
+                                                오전 {{ visit.visit_date.strftime('%I:%M').lstrip('0') }}
+                                            {% else %}
+                                                오후 {{ visit.visit_date.strftime('%I:%M').lstrip('0') }}
+                                            {% endif %}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
                                     <td>{{ visit.memo or '-' }}</td>
                                 </tr>
                                 {% endfor %}
@@ -141,12 +152,12 @@
     </div>
 </div>
 
-<!-- 빠른 액션 버튼 -->
+<!-- 빠른 메뉴 버튼 -->
 <div class="row mt-4">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-0">빠른 액션</h5>
+                <h5 class="card-title mb-0">빠른 메뉴</h5>
             </div>
             <div class="card-body">
                 <div class="row">
