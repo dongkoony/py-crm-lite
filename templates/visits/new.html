@@ -6,7 +6,7 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">방문 기록 등록</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
-        <a href="{{ url_for('visit_list') }}" class="btn btn-outline-secondary">
+        <a href="{{ url_for('visit.visit_list') }}" class="btn btn-outline-secondary">
             <i class="fas fa-arrow-left me-2"></i>목록으로
         </a>
     </div>
@@ -46,7 +46,7 @@
                     </div>
                     
                     <div class="d-flex justify-content-end">
-                        <a href="{{ url_for('visit_list') }}" class="btn btn-outline-secondary me-2">취소</a>
+                        <a href="{{ url_for('visit.visit_list') }}" class="btn btn-outline-secondary me-2">취소</a>
                         <button type="submit" class="btn btn-success">
                             <i class="fas fa-save me-2"></i>등록
                         </button>
