@@ -1,5 +1,3 @@
-# main.py
-
 from flask import Flask, render_template
 from datetime import datetime
 import secrets
@@ -37,12 +35,11 @@ def create_app():
         birth_day_customers = get_customer_by_birth_month(current_month)
         
         # 최근 방문 기록
-        all_visits = get_visits()
-        recent_visits = all_visits[:5] if all_visits else []
+        recent_visits = get_visits()[:5] if get_visits() else []
         
         return render_template("dashboard.html",
-                             overall_stats=overall_stats or {},
-                             birth_day_customers=birth_day_customers or [],
+                             overall_stats=overall_stats,
+                             birth_day_customers=birth_day_customers,
                              recent_visits=recent_visits)
     
     return app

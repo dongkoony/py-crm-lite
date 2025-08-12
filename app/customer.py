@@ -33,8 +33,9 @@ def create_customer(customer_data):
 # 전체 고객 조회
 def get_all_customers():
     query = "SELECT * FROM customer ORDER BY name"
-
-    return execute_query(query, fetch_all=True)
+    
+    result = execute_query(query, fetch_all=True)
+    return result if result is not None else []
 
 def get_customer_by_customer(customer_id):
     query = """
@@ -53,7 +54,8 @@ def search_customers(search_term):
 
     keywords = f"%{search_term}%"
 
-    return execute_query(query, (keywords, keywords, keywords), fetch_all=True)
+    result = execute_query(query, (keywords, keywords, keywords), fetch_all=True)
+    return result if result is not None else []
     
 # 고객 정보 수정
 def update_customer(customer_data):
@@ -105,4 +107,5 @@ def get_customer_by_birth_month(month):
     ORDER BY DAY(birth_date), name
     """
 
-    return execute_query(query, (month,), fetch_all=True)
+    result = execute_query(query, (month,), fetch_all=True)
+    return result if result is not None else []

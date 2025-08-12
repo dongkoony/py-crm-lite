@@ -34,7 +34,8 @@ def get_all_payments():
     ORDER BY p.payment_datetime DESC
     """
 
-    return execute_query(query, fetch_all=True)
+    result = execute_query(query, fetch_all=True)
+    return result if result is not None else []
 
 # 고객별 결제 기록 조회
 def get_payments_by_customer(customer_id):
@@ -48,8 +49,7 @@ def get_payments_by_customer(customer_id):
     """
 
     result = execute_query(query, (customer_id,), fetch_all=True)
-    return result if result else []
-    # return execute_query(query, fetch_all=True)
+    return result if result is not None else []
 
 # 결제 수정
 def update_payment(payment_data):
@@ -96,4 +96,5 @@ def delete_payment(payment_id):
 def get_payment_methods():
     query = "SELECT * FROM payment_method"
 
-    return execute_query(query, fetch_all=True)
+    result = execute_query(query, fetch_all=True)
+    return result if result is not None else []
