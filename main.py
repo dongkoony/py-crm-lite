@@ -1,12 +1,14 @@
 from flask import Flask, request, render_template, flash, url_for, redirect
 from app.customer import create_customer, get_all_customers, search_customers, update_customer, delete_customer, get_customer_by_birth_month, get_customer_by_customer
 from app.visit import create_visit, get_visits, get_visits_by_customer, update_visit, get_visits_by_date_range, get_visit_by_visit_id, delete_visit
-from app.payment import create_payment, get_all_payments, get_payments_by_customer, get_payment_methods
+from app.payment import create_payment, delete_payment, get_all_payments, get_payments_by_customer, get_payment_methods
 from app.stats import get_customer_statistics, get_overall_statistics, get_monthly_statistics
 
 from datetime import datetime, timedelta
+import secrets
 
 app = Flask(__name__)
+app.secret_key = secrets.token_hex(16)
 
 @app.route("/")
 def home():
@@ -141,9 +143,10 @@ def visit_new():
             flash("방문 기록 저장 실패", "error")
 
     customers = get_all_customers()
-    return render_template("visits/new.html", customers = customers)
+    today = datetime.now().strftime("%Y-%m-%d")
+    return render_template("visits/new.html", customers = customers, today = today)
 
-@app.route("/visits/<int:visit_id>/edit", medthods=["GET", "POST"])
+@app.route("/visits/<int:visit_id>/edit", methods=["GET", "POST"])
 def visit_edit(visit_id):
     visit = get_visit_by_visit_id(visit_id)
 
@@ -199,6 +202,16 @@ def payment_new():
     payment_methods = get_payment_methods()
     return render_template("payments/new.html", visits = visits, payment_methods = payment_methods)
 
+@app.route("/payments/<int:payment_id>/delete", methods=["POST"])
+def payment_delete(payment_id):
+    if delete_payment(payment_id):
+        flash("결제 삭제 성공", "success")
+
+    else:
+        flash("결제 삭제 실패", "error")
+
+    return redirect(url_for("payment_list"))
+
 @app.route("/stats")
 def stats_dashboard():
     overall_stats = get_overall_statistics()
@@ -233,3 +246,6 @@ def stats_customers():
             })
 
     return render_template("stats/customers.html", customer_stats = customer_stats)
+
+if __name__ == "__main__":
+    app.run(debug=True)

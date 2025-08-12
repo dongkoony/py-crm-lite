@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block title %}통계 대시보드 - CRM 시스템{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">통계 대시보드</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('stats_customers') }}" class="btn btn-outline-info">
+            <i class="fas fa-users me-2"></i>고객별 통계
+        </a>
+    </div>
+</div>
+
+<!-- 전체 통계 카드 -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title text-primary">
+                    <i class="fas fa-users"></i>
+                </h5>
+                <h3 class="card-text">{{ overall_stats.total_customers or 0 }}</h3>
+                <p class="card-text text-muted">총 고객수</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title text-success">
+                    <i class="fas fa-calendar-check"></i>
+                </h5>
+                <h3 class="card-text">{{ overall_stats.total_visits or 0 }}</h3>
+                <p class="card-text text-muted">총 방문수</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title text-warning">
+                    <i class="fas fa-money-bill-wave"></i>
+                </h5>
+                <h3 class="card-text">{{ "{:,}".format(overall_stats.total_revenue or 0) }}원</h3>
+                <p class="card-text text-muted">총 매출</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title text-info">
+                    <i class="fas fa-chart-line"></i>
+                </h5>
+                <h3 class="card-text">{{ "{:,}".format(overall_stats.avg_revenue_per_visit or 0) }}원</h3>
+                <p class="card-text text-muted">평균 결제금액</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- 이번달 통계 -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-calendar-alt text-primary me-2"></i>
+                    이번달 통계
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if monthly_stats %}
+                    <div class="row text-center">
+                        <div class="col-6 mb-3">
+                            <h4 class="text-primary">{{ monthly_stats.unique_customers or 0 }}</h4>
+                            <small class="text-muted">방문 고객</small>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <h4 class="text-success">{{ monthly_stats.total_visits or 0 }}</h4>
+                            <small class="text-muted">총 방문</small>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <h4 class="text-warning">{{ "{:,}".format(monthly_stats.total_revenue or 0) }}원</h4>
+                            <small class="text-muted">총 매출</small>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <h4 class="text-info">{{ "{:,}".format(monthly_stats.avg_revenue_per_visit or 0) }}원</h4>
+                            <small class="text-muted">평균 결제</small>
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="text-muted text-center">이번달 데이터가 없습니다.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- 월별 통계 -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-bar text-success me-2"></i>
+                    최근 6개월 매출
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if monthly_data %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>월</th>
+                                    <th>매출</th>
+                                    <th>방문수</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for month_data in monthly_data %}
+                                <tr>
+                                    <td>{{ month_data.year }}년 {{ month_data.month }}월</td>
+                                    <td class="text-end">{{ "{:,}".format(month_data.stats.total_revenue or 0) }}원</td>
+                                    <td class="text-end">{{ month_data.stats.total_visits or 0 }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted text-center">월별 데이터가 없습니다.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 추가 통계 정보 -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-info-circle text-info me-2"></i>
+                    추가 통계 정보
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6>방문 일수</h6>
+                        <p class="h4 text-primary">{{ overall_stats.total_visit_days or 0 }}일</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>고객당 평균 방문</h6>
+                        <p class="h4 text-success">
+                            {% if overall_stats.total_customers and overall_stats.total_customers > 0 %}
+                                {{ "%.1f"|format(overall_stats.total_visits / overall_stats.total_customers) }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>방문당 평균 매출</h6>
+                        <p class="h4 text-warning">
+                            {% if overall_stats.total_visits and overall_stats.total_visits > 0 %}
+                                {{ "{:,}".format(overall_stats.total_revenue / overall_stats.total_visits) }}원
+                            {% else %}
+                                0원
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

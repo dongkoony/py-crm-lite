@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}결제 내역 등록 - CRM 시스템{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">결제 내역 등록</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('payment_list') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>목록으로
+        </a>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">새 결제 내역 입력</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="visit_id" class="form-label">방문 기록 선택 <span class="text-danger">*</span></label>
+                        <select class="form-select" id="visit_id" name="visit_id" required>
+                            <option value="">방문 기록을 선택하세요</option>
+                            {% for visit in visits %}
+                            <option value="{{ visit.visit_id }}">
+                                {{ visit.customer_name }} - {{ visit.visit_date }} 
+                                {% if visit.memo %}({{ visit.memo }}){% endif %}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="amount" class="form-label">결제 금액 <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="amount" name="amount" 
+                                   placeholder="0" min="0" step="1000" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="payment_method_code" class="form-label">결제 수단 <span class="text-danger">*</span></label>
+                            <select class="form-select" id="payment_method_code" name="payment_method_code" required>
+                                <option value="">결제 수단을 선택하세요</option>
+                                {% for method in payment_methods %}
+                                <option value="{{ method.method_code }}">{{ method.method_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="payment_datetime" class="form-label">결제 일시 <span class="text-danger">*</span></label>
+                        <input type="datetime-local" class="form-control" id="payment_datetime" 
+                               name="payment_datetime" required>
+                    </div>
+                    
+                    <div class="d-flex justify-content-end">
+                        <a href="{{ url_for('payment_list') }}" class="btn btn-outline-secondary me-2">취소</a>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-save me-2"></i>등록
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// 현재 시간을 기본값으로 설정
+document.addEventListener('DOMContentLoaded', function() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    
+    const datetimeLocal = `${year}-${month}-${day}T${hours}:${minutes}`;
+    document.getElementById('payment_datetime').value = datetimeLocal;
+});
+
+// 금액 입력 시 자동 포맷팅
+document.getElementById('amount').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/[^\d]/g, '');
+    if (value) {
+        e.target.value = parseInt(value).toLocaleString();
+    }
+});
+</script>
+{% endblock %}

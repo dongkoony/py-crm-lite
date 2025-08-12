@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}대시보드 - CRM 시스템{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">대시보드</h1>
+</div>
+
+<!-- 전체 통계 카드 -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title text-primary">
+                    <i class="fas fa-users"></i>
+                </h5>
+                <h3 class="card-text">{{ overall_stats.total_customers or 0 }}</h3>
+                <p class="card-text text-muted">총 고객수</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title text-success">
+                    <i class="fas fa-calendar-check"></i>
+                </h5>
+                <h3 class="card-text">{{ overall_stats.total_visits or 0 }}</h3>
+                <p class="card-text text-muted">총 방문수</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title text-warning">
+                    <i class="fas fa-money-bill-wave"></i>
+                </h5>
+                <h3 class="card-text">{{ "{:,}".format(overall_stats.total_revenue or 0) }}원</h3>
+                <p class="card-text text-muted">총 매출</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title text-info">
+                    <i class="fas fa-chart-line"></i>
+                </h5>
+                <h3 class="card-text">{{ "{:,}".format(overall_stats.avg_revenue_per_visit or 0) }}원</h3>
+                <p class="card-text text-muted">평균 결제금액</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- 이번달 생일 고객 -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-birthday-cake text-danger me-2"></i>
+                    이번달 생일 고객
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if birthday_customers %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>이름</th>
+                                    <th>생년월일</th>
+                                    <th>연락처</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for customer in birthday_customers %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ url_for('customer_detail', customer_id=customer.customer_id) }}">
+                                            {{ customer.name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ customer.birth_date }}</td>
+                                    <td>{{ customer.phone }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">이번달 생일 고객이 없습니다.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- 최근 방문 기록 -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-clock text-primary me-2"></i>
+                    최근 방문 기록
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if recent_visits %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>고객명</th>
+                                    <th>방문일</th>
+                                    <th>메모</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for visit in recent_visits %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ url_for('customer_detail', customer_id=visit.customer_id) }}">
+                                            {{ visit.customer_name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ visit.visit_date }}</td>
+                                    <td>{{ visit.memo or '-' }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">최근 방문 기록이 없습니다.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 빠른 액션 버튼 -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">빠른 액션</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <a href="{{ url_for('customer_new') }}" class="btn btn-primary w-100">
+                            <i class="fas fa-user-plus me-2"></i>고객 등록
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{{ url_for('visit_new') }}" class="btn btn-success w-100">
+                            <i class="fas fa-calendar-plus me-2"></i>방문 기록
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{{ url_for('payment_new') }}" class="btn btn-warning w-100">
+                            <i class="fas fa-credit-card me-2"></i>결제 등록
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{{ url_for('stats_dashboard') }}" class="btn btn-info w-100">
+                            <i class="fas fa-chart-bar me-2"></i>통계 보기
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
