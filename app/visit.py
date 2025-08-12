@@ -33,7 +33,8 @@ def get_visits():
     ORDER BY visit_date DESC
     """
 
-    return execute_query(query, fetch_all=True)
+    result = execute_query(query, fetch_all=True)
+    return result if result is not None else []
 
 # 고객별 방문 기록 조회
 def get_visits_by_customer(customer_id):
@@ -45,7 +46,8 @@ def get_visits_by_customer(customer_id):
     ORDER BY v.visit_date DESC
     """
 
-    return execute_query(query, (customer_id,), fetch_all=True)
+    result = execute_query(query, (customer_id,), fetch_all=True)
+    return result if result is not None else []
 
 def get_visit_by_visit_id(visit_id):
     query = "SELECT * FROM visit WHERE visit_id = %s"
@@ -94,7 +96,8 @@ def get_visits_by_date_range(start_date, end_date):
     ORDER BY v.visit_date DESC
     """
 
-    return execute_query(query, (start_date, end_date), fetch_all=True)
+    result = execute_query(query, (start_date, end_date), fetch_all=True)
+    return result if result is not None else []
 
 
 
