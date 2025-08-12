@@ -1,7 +1,17 @@
-import mysql.connector
+try:
+    import mysql.connector
+    MYSQL_AVAILABLE = True
+except ImportError:
+    print("[WARNING] MySQL 모듈이 설치되지 않았습니다. 데모 모드로 실행됩니다.")
+    MYSQL_AVAILABLE = False
+
 from .config import Config
 
 def get_connection():
+    if not MYSQL_AVAILABLE:
+        print("[INFO] MySQL 모듈 없음 - 데모 모드")
+        return None
+        
     try:
         db_config = Config.get_db_config()
         connection = mysql.connector.connect(**db_config)
@@ -9,12 +19,8 @@ def get_connection():
         
         return connection
     
-    except mysql.connector.OperationalError as e:
+    except Exception as e:
         print(f"[ERROR] DB 연결 실패: {e}")
-        return None
-
-    except mysql.connector.Error as e:
-        print(f"[ERROR] DB 오류: {e}")
         return None
 
 def execute_query(query, params=None, fetch_one=False, fetch_all=False):
@@ -34,6 +40,11 @@ def execute_query(query, params=None, fetch_one=False, fetch_all=False):
 
     if conn is None:
         print("[ERROR] DB 연결 객체 없음.")
+        # 안전한 기본값 반환
+        if fetch_all:
+            return []
+        elif fetch_one:
+            return None
         return None
 
     try:
