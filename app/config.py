@@ -22,5 +22,5 @@ class Config:
             "user": cls.DB_USER,
             "password": cls.DB_PASSWORD,
             "database": cls.DB_NAME,
-            "autocommit": True
+            "autocommit": True  # 자동 커밋 활성화
         }

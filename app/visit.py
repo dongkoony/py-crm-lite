@@ -60,7 +60,7 @@ def update_visit(visit_id, memo):
 
     try:
         execute_query(query, (memo, visit_id))
-        print(f"방문 기록 수정 성공")
+        print(f"방문 기록 수정 성공: 방문 ID {visit_id}")
 
         return True
 
@@ -75,12 +75,12 @@ def delete_visit(visit_id):
 
     try:
         execute_query(query, (visit_id,))
-        print("방문 기록 삭제 성공")
+        print(f"방문 기록 삭제 성공: 방문 ID {visit_id}")
         
         return True
 
     except Exception as e:
-        print("방문 기록 삭제 실패")
+        print(f"방문 기록 삭제 실패: {e}")
 
         return False
     
@@ -94,7 +94,7 @@ def get_visits_by_date_range(start_date, end_date):
     ORDER BY v.visit_date DESC
     """
 
-    result = execute_query(query, fetch_all=True)
+    return execute_query(query, (start_date, end_date), fetch_all=True)
 
 
 

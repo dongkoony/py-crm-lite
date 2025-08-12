@@ -23,10 +23,10 @@ def execute_query(query, params=None, fetch_one=False, fetch_all=False):
 
     Args:
         query (str): 실행할 SQL 쿼리
-        params (tuple): 쿼리 파라미터
-        fetch_one (bool): 단건 반환 여부
-        fetch_all (bool): 여러건 반환 여부
-
+        params (tuple, optional): 쿼리 파라미터 (기본값: None)
+        fetch_one (bool): 단건 결과 반환 여부 (기본값: False)
+        fetch_all (bool): 여러건 결과 반환 여부 (기본값: False)
+    
     Returns:
         dict or list or None: 쿼리 결과
     """
@@ -37,7 +37,7 @@ def execute_query(query, params=None, fetch_one=False, fetch_all=False):
         return None
 
     try:
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor(dictionary=True)  # 결과를 딕셔너리 형태로 반환
         cursor.execute(query, params or ())
         
         result = None

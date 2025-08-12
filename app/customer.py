@@ -21,7 +21,7 @@ def create_customer(customer_data):
 
     try:
         execute_query(query, values)
-        print(f"고객 등록 성공: {customer_data["name"]}")
+        print(f"고객 등록 성공: {customer_data['name']}")
        
         return True
     
@@ -59,7 +59,7 @@ def search_customers(search_term):
 def update_customer(customer_data):
     query = """
     UPDATE customer
-    set name = %s, phone = %s, birth_date = %s, gender = %s, memo= %s
+    SET name = %s, phone = %s, birth_date = %s, gender = %s, memo = %s
     WHERE customer_id = %s
     """
     values = (
@@ -73,7 +73,7 @@ def update_customer(customer_data):
 
     try:
         execute_query(query, values)
-        print(f"고객 정보 수정 성공: {customer_data["name"]}")
+        print(f"고객 정보 수정 성공: {customer_data['name']}")
     
         return True
     
@@ -88,12 +88,12 @@ def delete_customer(customer_id):
     
     try:
         execute_query(query, (customer_id,))
-        print("고객 삭제 성공: {customer_id}")
+        print(f"고객 삭제 성공: {customer_id}")
 
         return True
     
     except Exception as e:
-        print("고객 삭제 실패: {e}")
+        print(f"고객 삭제 실패: {e}")
         
         return False
     

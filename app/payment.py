@@ -16,11 +16,11 @@ def create_payment(visit_id, payment_data):
 
     try:
         execute_query(query, values)
-        print(f"결제 기록 등록 성공: {payment_data}")
+        print(f"결제 기록 등록 성공: 방문 ID {visit_id}, 금액 {payment_data['amount']}")
         return True
     
     except Exception as e:
-        print("결제 기록 등록 실패")
+        print(f"결제 기록 등록 실패: {e}")
         return False
     
 # 전체 결제 기록 조회
@@ -62,17 +62,18 @@ def update_payment(payment_data):
     values = (
         payment_data["amount"],
         payment_data["payment_method_code"],
-        payment_data["payment_datetime"]
+        payment_data["payment_datetime"],
+        payment_data["payment_id"]
     )
 
     try:
         execute_query(query, values)
-        print("결제 기록 수정 성공: {payment_data}")
+        print(f"결제 기록 수정 성공: 결제 ID {payment_data['payment_id']}")
 
         return True
 
     except Exception as e:
-        print("결제 기록 수정 실패: {e}")
+        print(f"결제 기록 수정 실패: {e}")
 
         return False
 
@@ -82,12 +83,12 @@ def delete_payment(payment_id):
 
     try:
         execute_query(query, (payment_id,))
-        print("결제 기록 삭제 성공")
+        print(f"결제 기록 삭제 성공: 결제 ID {payment_id}")
 
         return True
     
     except Exception as e:
-        print("결제 기록 삭제 실패")
+        print(f"결제 기록 삭제 실패: {e}")
         
         return False
 

@@ -15,7 +15,7 @@ def home():
     # 전체 통계
     overall_stats = get_overall_statistics()
 
-    # 이번달 생일 고객
+    # 이번달 생일 고객 조회
     current_month = datetime.now().month
     birth_day_customers = get_customer_by_birth_month(current_month)
 
@@ -57,7 +57,6 @@ def customer_new():
         if create_customer(customer_data):
             flash("등록 성공", "success")
             return redirect(url_for("customer_list"))
-
         else:
             flash("등록 실패", "error")
 
