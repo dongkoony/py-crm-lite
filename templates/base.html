@@ -48,22 +48,22 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if 'customer' in request.endpoint %}active{% endif %}" href="{{ url_for('customer_list') }}">
+                            <a class="nav-link {% if 'customer' in request.endpoint %}active{% endif %}" href="{{ url_for('customer.customer_list') }}">
                                 <i class="fas fa-users me-2"></i>고객 관리
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if 'visit' in request.endpoint %}active{% endif %}" href="{{ url_for('visit_list') }}">
+                            <a class="nav-link {% if 'visit' in request.endpoint %}active{% endif %}" href="{{ url_for('visit.visit_list') }}">
                                 <i class="fas fa-calendar-check me-2"></i>방문 기록
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if 'payment' in request.endpoint %}active{% endif %}" href="{{ url_for('payment_list') }}">
+                            <a class="nav-link {% if 'payment' in request.endpoint %}active{% endif %}" href="{{ url_for('payment.payment_list') }}">
                                 <i class="fas fa-credit-card me-2"></i>결제 내역
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if 'stats' in request.endpoint %}active{% endif %}" href="{{ url_for('stats_dashboard') }}">
+                            <a class="nav-link {% if 'stats' in request.endpoint %}active{% endif %}" href="{{ url_for('stats.stats_dashboard') }}">
                                 <i class="fas fa-chart-bar me-2"></i>통계
                             </a>
                         </li>
