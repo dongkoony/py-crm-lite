@@ -55,13 +55,13 @@ def get_visit_by_visit_id(visit_id):
     return execute_query(query, (visit_id,), fetch_one=True)
 
 # 방문 기록 수정
-def update_visit(visit_id, memo):
+def update_visit(visit_id, visit_data):
     query = """
-    UPDATE visit SET memo = %s WHERE visit_id = %s
+    UPDATE visit SET visit_date = %s, memo = %s WHERE visit_id = %s
     """
 
     try:
-        execute_query(query, (memo, visit_id))
+        execute_query(query, (visit_data["visit_date"], visit_data["memo"], visit_id))
         print(f"방문 기록 수정 성공: 방문 ID {visit_id}")
 
         return True
