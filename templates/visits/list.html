@@ -52,7 +52,7 @@
                             <th>고객명</th>
                             <th>방문일</th>
                             <th>메모</th>
-                            <th>액션</th>
+                            <th>관리</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -64,7 +64,18 @@
                                     {{ visit.customer_name }}
                                 </a>
                             </td>
-                            <td>{{ visit.visit_date }}</td>
+                            <td>
+                                {% if visit.visit_date %}
+                                    {{ visit.visit_date.strftime('%Y-%m-%d') }}
+                                    {% if visit.visit_date.hour < 12 %}
+                                        오전 {{ visit.visit_date.strftime('%I:%M').lstrip('0') }}
+                                    {% else %}
+                                        오후 {{ visit.visit_date.strftime('%I:%M').lstrip('0') }}
+                                    {% endif %}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
                             <td>
                                 {% if visit.memo %}
                                     <span class="text-truncate d-inline-block" style="max-width: 200px;" 
