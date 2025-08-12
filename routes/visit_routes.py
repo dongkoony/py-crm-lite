@@ -53,8 +53,12 @@ def visit_edit(visit_id):
         return redirect(url_for("visit.visit_list"))
 
     if request.method == "POST":
-        memo = request.form["memo"]
-        if update_visit(visit_id, memo):
+        visit_data = {
+            "visit_date": request.form["visit_date"],
+            "memo": request.form["memo"]
+        }
+        
+        if update_visit(visit_id, visit_data):
             flash("방문 기록 수정 성공", "success")
             return redirect(url_for("visit.visit_list"))
         else:
