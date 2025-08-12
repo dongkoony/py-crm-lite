@@ -66,7 +66,7 @@
                 </h5>
             </div>
             <div class="card-body">
-                {% if birthday_customers %}
+                {% if birth_day_customers %}
                     <div class="table-responsive">
                         <table class="table table-sm">
                             <thead>
@@ -77,7 +77,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for customer in birthday_customers %}
+                                {% for customer in birth_day_customers %}
                                 <tr>
                                     <td>
                                         <a href="{{ url_for('customer_detail', customer_id=customer.customer_id) }}">
