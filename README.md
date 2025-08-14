@@ -26,7 +26,7 @@
 - **월별 통계**: 월별 매출 및 방문 통계
 - **대시보드**: 주요 지표를 한눈에 확인
 
-##  데이터베이스 구조
+## 데이터베이스 구조
 
 ### ERD (Entity Relationship Diagram)
 ![CRM ERD](docs/crm_erd.png)
@@ -131,6 +131,7 @@ python main.py
 - **Template Engine**: Jinja2
 - **Database**: MySQL
 - **ORM**: mysql-connector-python (Native SQL)
+- **Testing**: pytest
 
 ## 📁 파일 구조
 ```
@@ -142,7 +143,14 @@ py-crm-lite/
 │   ├── visit.py            # 방문 관리 모듈
 │   ├── payment.py          # 결제 관리 모듈
 │   └── stats.py            # 통계 관리 모듈
-├── apis/                  
+├── routes/                 # Flask Blueprint 라우트
+│   ├── __init__.py
+│   ├── customer_routes.py  # 고객 관련 라우트
+│   ├── visit_routes.py     # 방문 관련 라우트
+│   ├── payment_routes.py   # 결제 관련 라우트
+│   ├── stats_routes.py     # 통계 관련 라우트
+│   └── utils.py            # 라우트 유틸리티 함수
+├── apis/                   # API 엔드포인트 (향후 확장용)
 │   └── __init__.py
 ├── tests/                  # 테스트 코드
 │   ├── conftest.py         # pytest 설정
@@ -172,13 +180,20 @@ py-crm-lite/
 │       ├── edit.html       # 방문 수정 페이지
 │       ├── list.html       # 방문 목록 페이지
 │       └── new.html        # 방문 등록 페이지
-├── docs/                   # 문서
-│   └── crm_erd.png         # 데이터베이스 ERD 이미지
+├── docs/                   # 프로젝트 문서
+│   ├── crm_erd.png         # 데이터베이스 ERD 이미지
+│   ├── blueprint_migration_guide.md    # Blueprint 마이그레이션 가이드
+│   ├── bug_fixes_and_improvements.md   # 버그 수정 및 개선사항
+│   ├── database_setup_guide.md         # 데이터베이스 설정 가이드
+│   ├── error_handling_improvements.md  # 에러 처리 개선사항
+│   ├── refactoring_guide.md            # 리팩토링 가이드
+│   └── testing_guide.md                # 테스트 가이드
 ├── py-crm-venv/            # Python 가상환경
-├── main.py                 # 메인 실행 파일 (Flask 앱)
-├── main copy.py            
+├── main.py                 # 메인 실행 파일 (Flask 앱 - Blueprint 구조)
+├── main_backup.py          # 백업 파일 (이전 버전)
+├── main_refactored.py      # 리팩토링된 버전
 ├── requirements.txt        # 의존성 패키지 목록
-├── pytest.ini              # pytest 설정 파일
+├── pytest.ini             # pytest 설정 파일
 ├── .env                    # 환경 변수 (데이터베이스 연결 정보)
 ├── .gitignore             
 └── README.md               # 프로젝트 문서
